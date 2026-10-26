@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: signaldesk-zoomcamp
+    runtime: docker
+    plan: free
+    envVars:
+      - key: DATABASE_PATH
+        value: /tmp/signaldesk.db
+      - key: DEMO_SEED
+        value: "true"
+      - key: READ_ONLY
+        value: "true"
+    healthCheckPath: /health
+# Free-tier /tmp is ephemeral: intentionally read-only, public demo data only.
+# For durable writes, use a persistent volume/DB on a paid or separate deployment.

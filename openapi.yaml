@@ -1,0 +1,339 @@
+# OpenAPI contract from typed routes; see tests for alignment.
+openapi: 3.1.0
+info:
+  title: SignalDesk API
+  description: 'Demo outreach tracking for independent music releases. No authentication:
+    do not store real contact data.'
+  version: 1.0.0
+paths:
+  /health:
+    get:
+      tags:
+      - Operations
+      summary: Health
+      operationId: health_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /ops/metrics:
+    get:
+      tags:
+      - Operations
+      summary: Metrics
+      operationId: metrics_ops_metrics_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/contacts:
+    get:
+      tags:
+      - Contacts
+      summary: Contacts
+      operationId: contacts_api_contacts_get
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - enum:
+            - planned
+            - sent
+            - replied
+            - confirmed
+            - closed
+            type: string
+          - type: 'null'
+          title: Status
+      - name: q
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 120
+          default: ''
+          title: Q
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 100
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Contacts
+      summary: Create Contact
+      operationId: create_contact_api_contacts_post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/contacts/{contact_id}:
+    get:
+      tags:
+      - Contacts
+      summary: Contact
+      operationId: contact_api_contacts__contact_id__get
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Contact Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Contacts
+      summary: Update Contact
+      operationId: update_contact_api_contacts__contact_id__patch
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Contact Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactPatch'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Contacts
+      summary: Remove Contact
+      operationId: remove_contact_api_contacts__contact_id__delete
+      parameters:
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Contact Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/summary:
+    get:
+      tags:
+      - Contacts
+      summary: Summary
+      operationId: summary_api_summary_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/config:
+    get:
+      tags:
+      - Operations
+      summary: Config
+      operationId: config_api_config_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    ContactCreate:
+      properties:
+        outlet:
+          type: string
+          maxLength: 120
+          minLength: 2
+          title: Outlet
+        channel:
+          type: string
+          enum:
+          - radio
+          - press
+          - playlist
+          - venue
+          - other
+          title: Channel
+        status:
+          type: string
+          enum:
+          - planned
+          - sent
+          - replied
+          - confirmed
+          - closed
+          title: Status
+          default: planned
+        due_date:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Due Date
+        notes:
+          type: string
+          maxLength: 1000
+          title: Notes
+          default: ''
+      additionalProperties: false
+      type: object
+      required:
+      - outlet
+      - channel
+      title: ContactCreate
+    ContactPatch:
+      properties:
+        outlet:
+          anyOf:
+          - type: string
+            maxLength: 120
+            minLength: 2
+          - type: 'null'
+          title: Outlet
+        channel:
+          anyOf:
+          - type: string
+            enum:
+            - radio
+            - press
+            - playlist
+            - venue
+            - other
+          - type: 'null'
+          title: Channel
+        status:
+          anyOf:
+          - type: string
+            enum:
+            - planned
+            - sent
+            - replied
+            - confirmed
+            - closed
+          - type: 'null'
+          title: Status
+        due_date:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Due Date
+        notes:
+          anyOf:
+          - type: string
+            maxLength: 1000
+          - type: 'null'
+          title: Notes
+      additionalProperties: false
+      type: object
+      title: ContactPatch
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

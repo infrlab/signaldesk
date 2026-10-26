@@ -1,0 +1,37 @@
+name: Test and Audit
+on:
+  push:
+  pull_request:
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Verify Python syntax
+        run: python -m compileall -q backend
+      - name: Verify JS syntax
+        run: node --check frontend/app.js
+      - name: Unit and API integration tests
+        run: python -m pytest -q
+      - name: Security baseline
+        run: python ops/check_security.py
+  deploy:
+    needs: quality
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render deploy hook after tests pass
+        if: ${{ secrets.RENDER_DEPLOY_HOOK_URL != '' }}
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: curl --fail --silent --show-error -X POST "$DEPLOY_HOOK_URL"
+# Requires the user's own Render deploy hook saved in GitHub Actions secrets.
+# Without this secret, CI runs but no deployment occurs.

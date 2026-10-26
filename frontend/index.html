@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Track independent music release outreach, pitches and follow-ups.">
+  <title>SignalDesk — Independent release tracker</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">S.</span><div><strong>SIGNALDESK</strong><small>Independent release operations</small></div></div>
+      <div class="sidebar-caption">YOUR WORKSPACE</div>
+      <nav aria-label="Primary"><a class="nav-active" href="/" aria-current="page">◩ &nbsp; Overview</a><a href="/docs" target="_blank" rel="noopener noreferrer">↗ &nbsp; API documentation</a></nav>
+      <div class="sidebar-footer"><span class="online-dot"></span> Portfolio project · v1.0<br><span>AI Dev Tools Zoomcamp · 2026</span></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div class="eyebrow">RELEASE OPERATIONS / OVERVIEW</div><div class="top-right"><span class="pilot">DEMO PROJECT</span></div></header>
+      <div class="content">
+        <div class="heading"><div><p class="kicker">WORKSPACE / 01</p><h1>Outreach, <em>organized.</em></h1><p class="subhead">One place to keep pitches, replies and follow-ups moving.</p></div><button type="button" class="primary" id="newButton"><span aria-hidden="true">＋</span> New contact</button></div>
+        <div id="banner" class="banner" role="status" hidden></div>
+        <section aria-label="Outreach summary" class="stats">
+          <div class="stat"><span>Total contacts</span><strong id="statTotal">—</strong><small>Across the current campaign</small></div>
+          <div class="stat"><span>Pitch sent</span><strong id="statSent">—</strong><small>Waiting to be heard</small></div>
+          <div class="stat"><span>Replies received</span><strong id="statReplied">—</strong><small>Conversations in motion</small></div>
+          <div class="stat"><span>Confirmed</span><strong id="statConfirmed">—</strong><small>Positive responses</small></div>
+        </section>
+        <section class="workspace" aria-label="Outreach tracker">
+          <div class="workspace-top"><div><p class="kicker">THE PIPELINE</p><h2>Outreach tracker</h2></div><span id="recordCount" class="count">— RECORDS</span></div>
+          <div class="filters"><label class="search"><span aria-hidden="true">⌕</span><span class="sr-only">Search outlets</span><input type="search" id="searchInput" placeholder="Search outlets..." maxlength="120"></label><label class="filter-label"><span class="sr-only">Filter by status</span><select id="filterStatus"><option value="">All statuses</option><option value="planned">Planned</option><option value="sent">Sent</option><option value="replied">Replied</option><option value="confirmed">Confirmed</option><option value="closed">Closed</option></select></label></div>
+          <div class="table-scroll"><table><thead><tr><th>OUTLET / CONTACT</th><th>CHANNEL</th><th>STATUS</th><th>FOLLOW-UP</th><th class="right">ACTIONS</th></tr></thead><tbody id="contactsBody"><tr><td colspan="5" class="empty">Loading outreach...</td></tr></tbody></table></div>
+          <p class="footnote">Demo data only. No real contacts or private information are included.</p>
+        </section>
+        <footer class="page-footer"><span>Built for independent artists &amp; creative teams.</span><span>SignalDesk © 2026</span></footer>
+      </div>
+    </main>
+  </div>
+  <dialog id="contactDialog" aria-labelledby="modalTitle"><form id="contactForm" class="form" method="dialog"><div class="modal-top"><div><p class="kicker">YOUR PIPELINE</p><h2 id="modalTitle">Add a contact</h2></div><button type="button" id="closeButton" class="icon-close" aria-label="Close dialog">×</button></div><label>Outlet name<input id="outlet" name="outlet" required minlength="2" maxlength="120" placeholder="e.g. Independent Radio"></label><div class="field-grid"><label>Channel<select id="channel" name="channel" required><option value="radio">Radio</option><option value="press">Press</option><option value="playlist">Playlist</option><option value="venue">Venue</option><option value="other">Other</option></select></label><label>Status<select id="status" name="status" required><option value="planned">Planned</option><option value="sent">Sent</option><option value="replied">Replied</option><option value="confirmed">Confirmed</option><option value="closed">Closed</option></select></label></div><label>Follow-up date<input id="due_date" name="due_date" type="date"></label><label>Notes<textarea id="notes" name="notes" rows="3" maxlength="1000" placeholder="Next steps, not private contact details"></textarea></label><p id="formError" class="form-error" role="alert" hidden></p><div class="modal-actions"><button id="cancelButton" type="button" class="secondary">Cancel</button><button class="primary" type="submit" id="saveButton">Save contact</button></div></form></dialog>
+</body>
+</html>

@@ -1,0 +1,14 @@
+services:
+  signaldesk:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_PATH: /data/signaldesk.db
+      DEMO_SEED: "true"
+      READ_ONLY: "false"
+    volumes:
+      - signaldesk_data:/data
+    restart: unless-stopped
+volumes:
+  signaldesk_data:
